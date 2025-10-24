@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html, body { height: 100%; }
+html { scroll-behavior: smooth; }
+body { @apply antialiased; }
+
+/* Display font utility (used for headings only) */
+.font-display { font-family: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"; }
+
+.emoji {
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","EmojiOne Color","Twemoji Mozilla",system-ui,sans-serif;
+  font-variant-emoji: emoji;
+}
+
+.flag{ width: 1em; height: .75em; border-radius: 3px; box-shadow: 0 0 0 1px rgba(0,0,0,.08); display:inline-block; vertical-align:-.125em }
+
+@keyframes icon-breathe {
+  0% { transform: translateZ(0) scale(1); }
+  50% { transform: translateZ(0) scale(1.06); }
+  100% { transform: translateZ(0) scale(1); }
+}
+.icon-anim { will-change: transform; transform-origin: center; }
+.group:hover .icon-anim { animation: icon-breathe 1400ms ease-in-out both; }
+
+@keyframes sparkle {
+  0%,100% { transform: translateY(0) scale(1); opacity: .9; }
+  50% { transform: translateY(-1px) scale(1.06); opacity: 1; }
+}
+.sparkle { animation: sparkle 1500ms ease-in-out infinite; }
+
+/* fixed nav button width */
+.nav-btn { min-width: 6.5rem; }
+@media (min-width: 1024px) {
+  .nav-btn { min-width: 7rem; }
+}
+
+/* Fade animation for tab transitions */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 220ms ease-out both; }
+
+/* Card hover lift */
+.card {
+  transition: transform 180ms ease, box-shadow 200ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(16,185,129,0.08);
+  border-color: rgba(16,185,129,0.35);
+}
+
+/* Hide horizontal scrollbar (used for mobile tab selector) */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Section wrapper */
+@keyframes electricPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(0,255,150,0.15); }
+  50% { box-shadow: 0 0 16px rgba(0,255,150,0.25); }
+}
+.section-wrapper { animation: electricPulse 6s ease-in-out infinite; }
+.section-wrapper { @apply bg-neutral-900/50 border border-neutral-700 backdrop-blur rounded-2xl p-8; }
+
+/* Scroll progress bar */
+.progress-bar { position: fixed; top: 0; left: 0; height: 3px; width: 100%; pointer-events: none; z-index: 60; }
+.progress-bar__inner { height: 100%; transform-origin: left center; transition: transform 60ms linear; background: linear-gradient(90deg, rgba(16,185,129,1), rgba(99,102,241,1)); }
+
+/* Diagnostic terminal lines */
+@keyframes lineFade {
+  0% { opacity: 0; transform: translateY(3px); }
+  15% { opacity: .7; transform: translateY(0); }
+  85% { opacity: .7; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-2px); }
+}
+.term-line { animation: lineFade 3000ms ease-in-out forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* Better focus ring */
+:focus-visible { outline: 2px solid rgba(16,185,129,.8); outline-offset: 2px; border-radius: .5rem; }
+
+/* Button press feedback */
+button:active, a:active { transform: translateY(1px); }
+
+.dark .term-box { @apply bg-neutral-900/40 border-neutral-700; }
+
+
+/* Hide scrollbars everywhere but keep scrolling */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+body {
+  overflow-y: scroll; /* keep layout stable */
+}
+
+/* --- Mobile hamburger open animation --- */
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-menu-in {
+  animation: menu-in 180ms cubic-bezier(.2,.7,.2,1) both;
+  transform-origin: top center;
+}
+
+
+/* --- Language switch cross-fade --- */
+@keyframes i18n-fade {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.lang-anim {
+  animation: i18n-fade 200ms ease-out both;
+}
+
+
+/* --- Language switch with View Transitions --- */
+#lang-root { view-transition-name: i18n; }
+
+::view-transition-old(i18n),
+::view-transition-new(i18n) {
+  animation-duration: 260ms;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+}
+
+@keyframes langFadeOut { from { opacity: 1; filter: none; } to { opacity: 0; filter: saturate(.9) blur(2px); } }
+::view-transition-old(i18n) { animation-name: langFadeOut; }
+
+@keyframes langFadeIn { from { opacity: 0; filter: saturate(.9) blur(2px); } to { opacity: 1; filter: none; } }
+::view-transition-new(i18n) { animation-name: langFadeIn; }
+
+@media (prefers-reduced-motion: reduce) { #lang-root { view-transition-name: none; } }
